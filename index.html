@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>От нуля до инженера — ownproof</title>
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Mono:wght@400;700&family=Martian+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --red: #e8192c;
+    --red-dim: #7a0d17;
+    --red-glow: rgba(232,25,44,0.11);
+    --red-line: rgba(232,25,44,0.25);
+    --ink: #ffffff;
+    --muted: #2e2e2e;
+    --text: #a8a6a2;
+    --text-soft: #4a4a4a;
+    --border: #1e1e1e;
+    --white5: rgba(255,255,255,0.04);
+    --russo: 'Russo One', sans-serif;
+    --mono: 'Martian Mono', monospace;
+    --code: 'Space Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--mono);
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 36px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ══════════════════════════════════════
+     HERO
+  ══════════════════════════════════════ */
+  .hero { padding: 68px 0 48px; }
+
+  .hero-eyebrow {
+    font-family: var(--code);
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.8;
+  }
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 48px;
+    background: var(--red);
+    opacity: 0.4;
+  }
+
+  /* ── ЗАГОЛОВОК ── */
+  .hero-title { line-height: 0.88; margin-bottom: 32px; }
+
+  .t-line1 {
+    display: block;
+    font-family: var(--russo);
+    font-size: clamp(72px, 16vw, 128px);
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    line-height: 0.88;
+    text-shadow:
+      0 0 28px rgba(255,255,255,0.09),
+      0 2px 0 rgba(0,0,0,0.9);
+  }
+
+  .t-line2 {
+    display: block;
+    font-family: var(--russo);
+    font-size: clamp(38px, 8vw, 64px);
+    color: var(--text-soft);
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    line-height: 1;
+    margin: 8px 0 6px;
+  }
+
+  .t-line3 {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .t-инженера {
+    font-family: var(--russo);
+    font-size: clamp(64px, 14vw, 112px);
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    line-height: 0.88;
+    text-shadow:
+      0 0 22px rgba(232,25,44,0.20),
+      0 0 48px rgba(232,25,44,0.09),
+      0 2px 0 rgba(0,0,0,0.9);
+  }
+
+  .t-mlops {
+    font-family: var(--russo);
+    font-size: clamp(22px, 4.5vw, 36px);
+    color: rgba(255,255,255,0.28);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    align-self: flex-end;
+    padding-bottom: 10px;
+  }
+
+  .t-star {
+    font-size: 0.65em;
+    color: var(--red);
+    vertical-align: super;
+    line-height: 0;
+    opacity: 0.9;
+  }
+
+  /* ── СНОСКА ── */
+  .footnote {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red-dim);
+    border-radius: 2px;
+    background: var(--surface);
+    margin-bottom: 28px;
+  }
+
+  .footnote-star {
+    font-family: var(--russo);
+    font-size: 15px;
+    color: var(--red);
+    flex-shrink: 0;
+    margin-top: 2px;
+    opacity: 0.85;
+  }
+
+  .footnote-text {
+    font-family: var(--code);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.85;
+  }
+
+  .footnote-text strong {
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  /* ── HERO SUB ── */
+  .hero-sub {
+    font-family: var(--code);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.9;
+    border-left: 2px solid rgba(232,25,44,0.25);
+    padding-left: 16px;
+    max-width: 560px;
+    margin-bottom: 28px;
+  }
+  .hero-sub strong { color: var(--ink); font-weight: 400; }
+
+  /* ── STATS BAR ── */
+  .proof-bar {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    max-width: 560px;
+  }
+
+  .proof-item {
+    flex: 1;
+    padding: 16px 18px;
+    border-right: 1px solid var(--border);
+  }
+  .proof-item:last-child { border-right: none; }
+
+  .proof-num {
+    font-family: var(--russo);
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .proof-num.red { color: var(--red); }
+
+  .proof-label {
+    font-family: var(--code);
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-top: 3px;
+  }
+
+  .proof-desc {
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  /* ══════════════════════════════════════
+     SECTION LABEL
+  ══════════════════════════════════════ */
+  .sec-label {
+    font-family: var(--code);
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin: 52px 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sec-label::before { content: '//'; color: var(--red); font-size: 11px; letter-spacing: 0; }
+
+  /* ══════════════════════════════════════
+     PHASES
+  ══════════════════════════════════════ */
+  .phase {
+    margin-bottom: 8px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .phase:hover { border-color: var(--red-dim); }
+
+  .phase-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--surface);
+    position: relative;
+    cursor: default;
+  }
+  .phase-head::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--red);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .phase:hover .phase-head::before { opacity: 1; }
+
+  .phase-badge {
+    font-family: var(--russo);
+    font-size: 10px;
+    color: var(--red);
+    background: var(--red-glow);
+    border: 1px solid var(--red-line);
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+
+  .phase-title {
+    font-family: var(--russo);
+    font-size: 13px;
+    color: var(--ink);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .phase-wks {
+    margin-left: auto;
+    font-family: var(--code);
+    font-size: 9px;
+    color: var(--text-soft);
+    letter-spacing: 2px;
+    flex-shrink: 0;
+  }
+
+  .phase-body { padding: 0 20px 16px; background: var(--surface); }
+
+  .phase-note {
+    font-family: var(--code);
+    font-size: 12px;
+    color: var(--text-soft);
+    padding: 12px 0 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 14px;
+    line-height: 1.8;
+  }
+  .phase-note .hl { color: var(--red); }
+
+  .weeks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+
+  .week {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 13px 15px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: background 0.15s;
+  }
+  .week:hover { background: #1e1e1e; }
+
+  .wk-n {
+    font-family: var(--russo);
+    font-size: 26px;
+    line-height: 1;
+    color: var(--muted);
+    flex-shrink: 0;
+    width: 26px;
+    text-align: center;
+    transition: color 0.15s;
+  }
+  .week:hover .wk-n { color: var(--red-dim); }
+
+  .wk-body { flex: 1; }
+  .wk-theme { font-family: var(--mono); font-size: 12.5px; font-weight: 700; color: var(--ink); margin-bottom: 4px; line-height: 1.4; }
+  .wk-plain { font-size: 11.5px; color: var(--text-soft); line-height: 1.6; }
+  .wk-analogy { font-family: var(--code); font-size: 11px; color: var(--red); margin-top: 6px; opacity: 0.8; line-height: 1.5; }
+
+  .conn { display: flex; align-items: center; gap: 8px; padding: 5px 0 5px 20px; }
+  .conn-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); opacity: 0.3; flex-shrink: 0; }
+  .conn-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--red-dim), transparent); opacity: 0.2; }
+
+  .phase-continues {
+    margin-top: 8px;
+    padding: 14px 20px;
+    border: 1px dashed var(--border);
+    border-radius: 2px;
+    font-family: var(--code);
+    font-size: 12px;
+    color: var(--text-soft);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.7;
+  }
+  .phase-continues .arrow { color: var(--red); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ══════════════════════════════════════
+     MLOPS BLOCK
+  ══════════════════════════════════════ */
+  .mlops-block {
+    margin-top: 48px;
+    border: 1px solid var(--red-line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .mlops-header {
+    background: var(--red);
+    padding: 14px 22px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .mlops-header-title {
+    font-family: var(--russo);
+    font-size: 13px;
+    color: #000;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .mlops-header-sub {
+    font-family: var(--code);
+    font-size: 9px;
+    color: rgba(0,0,0,0.45);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .mlops-body { padding: 24px 22px; background: linear-gradient(135deg, #0d0707, #0a0a0a); }
+
+  .mlops-def {
+    font-family: var(--code);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.9;
+    border-left: 2px solid var(--red);
+    padding-left: 16px;
+    margin-bottom: 24px;
+  }
+  .mlops-def strong { color: var(--ink); font-weight: 400; }
+
+  .mlops-does-title {
+    font-family: var(--code);
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mlops-does-title::before { content: '//'; color: var(--red); letter-spacing: 0; }
+
+  .mlops-tasks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 28px; }
+
+  .mlops-task {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.6;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .mlops-task-icon { color: var(--red); font-size: 10px; flex-shrink: 0; margin-top: 3px; font-family: var(--code); }
+
+  .mlops-why-rare {
+    padding: 18px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .mlops-why-rare-title {
+    font-family: var(--russo);
+    font-size: 11px;
+    color: var(--ink);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .rare-stats { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .rare-stat {
+    flex: 1;
+    min-width: 130px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .rare-stat-num { font-family: var(--russo); font-size: 24px; color: var(--red); line-height: 1; }
+  .rare-stat-desc { font-family: var(--code); font-size: 11px; color: var(--text-soft); margin-top: 4px; line-height: 1.6; }
+
+  .salary-title {
+    font-family: var(--code);
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .salary-title::before { content: '//'; color: var(--red); letter-spacing: 0; }
+
+  .salary-grades { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+
+  .grade-card {
+    padding: 16px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .grade-card.active { border-color: var(--red-line); background: #120909; }
+  .grade-card.active::before {
+    content: 'ЦЕЛЬ';
+    position: absolute;
+    top: 8px; right: 10px;
+    font-family: var(--russo);
+    font-size: 8px;
+    color: var(--red);
+    letter-spacing: 1px;
+    opacity: 0.6;
+  }
+  .grade-name { font-family: var(--code); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-soft); margin-bottom: 6px; }
+  .grade-salary { font-family: var(--russo); font-size: 22px; color: var(--ink); line-height: 1; }
+  .grade-card.active .grade-salary { color: var(--red); }
+  .grade-salary span { font-size: 11px; color: var(--text-soft); font-family: var(--code); }
+  .grade-note { font-family: var(--code); font-size: 10px; color: var(--text-soft); margin-top: 5px; line-height: 1.5; }
+
+  /* ══════════════════════════════════════
+     PROMPT BLOCK
+  ══════════════════════════════════════ */
+  .prompt-block {
+    margin-top: 48px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .prompt-header {
+    background: var(--surface);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .prompt-header-title { font-family: var(--russo); font-size: 11px; color: var(--ink); text-transform: uppercase; letter-spacing: 1px; }
+  .prompt-header-badge { font-family: var(--code); font-size: 9px; color: var(--red); border: 1px solid var(--red-line); background: var(--red-glow); padding: 2px 8px; border-radius: 2px; letter-spacing: 2px; text-transform: uppercase; }
+
+  .prompt-intro {
+    padding: 20px 22px 0;
+    font-family: var(--code);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.85;
+  }
+  .prompt-intro strong { color: var(--ink); font-weight: 400; }
+
+  .prompt-box {
+    margin: 16px 22px 0;
+    background: #050505;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 22px 20px;
+    position: relative;
+  }
+  .prompt-box::before {
+    content: '> PROMPT';
+    position: absolute;
+    top: 0; left: 14px;
+    transform: translateY(-50%);
+    background: #050505;
+    font-family: var(--code);
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--red);
+    padding: 0 6px;
+  }
+  .prompt-text { font-family: var(--code); font-size: 12px; color: #7a7a7a; line-height: 2.0; white-space: pre-wrap; }
+  .prompt-text .kw { color: var(--ink); }
+
+  .copy-btn {
+    display: block;
+    margin: 10px 22px 22px;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--text-soft);
+    font-family: var(--code);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+    text-align: left;
+    width: calc(100% - 44px);
+  }
+  .copy-btn:hover { border-color: var(--red-line); color: var(--red); }
+  .copy-btn.copied { color: #4caf50; border-color: rgba(76,175,80,0.3); }
+
+  /* ══════════════════════════════════════
+     CTA
+  ══════════════════════════════════════ */
+  .cta {
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 26px 26px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta::after {
+    content: 'OWNPROOF';
+    position: absolute;
+    right: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--russo);
+    font-size: 72px;
+    color: var(--white5);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 2px;
+  }
+  .cta-left { flex: 1; position: relative; z-index: 1; }
+  .cta-tag { font-family: var(--code); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--red); margin-bottom: 5px; }
+  .cta-text { font-size: 13px; color: var(--text); line-height: 1.6; }
+  .cta-link {
+    position: relative;
+    z-index: 1;
+    font-family: var(--russo);
+    font-size: 11px;
+    color: #000;
+    background: var(--red);
+    text-decoration: none;
+    padding: 14px 22px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+    display: block;
+  }
+  .cta-link:hover { background: #ff2d40; transform: translateY(-1px); }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  .footer {
+    margin-top: 48px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-brand { font-family: var(--russo); font-size: 13px; color: var(--red); letter-spacing: 2px; text-transform: uppercase; }
+  .footer-tag { font-family: var(--russo); font-size: 13px; color: var(--text-soft); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════ */
+  @media (max-width: 620px) {
+    .page { padding: 0 18px 80px; }
+    .t-line1 { font-size: 64px; }
+    .t-инженера { font-size: 56px; }
+    .weeks, .mlops-tasks, .salary-grades { grid-template-columns: 1fr; }
+    .proof-bar { flex-wrap: wrap; }
+    .proof-item { min-width: 45%; }
+    .cta { flex-direction: column; gap: 14px; }
+    .cta::after { display: none; }
+    .footer { flex-direction: column; gap: 8px; }
+    .rare-stats { flex-direction: column; }
+    .prompt-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .t-line3 { gap: 8px; }
+  }
+
+  /* ══════════════════════════════════════
+     ANIMATIONS
+  ══════════════════════════════════════ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero          { animation: fadeUp 0.45s ease both; }
+  .phase         { animation: fadeUp 0.4s ease both; }
+  .phase:nth-child(2) { animation-delay: 0.08s; }
+  .phase:nth-child(3) { animation-delay: 0.16s; }
+  .mlops-block   { animation: fadeUp 0.4s ease 0.22s both; }
+  .prompt-block  { animation: fadeUp 0.4s ease 0.28s both; }
+  .cta           { animation: fadeUp 0.4s ease 0.34s both; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <div class="hero">
+    <div class="hero-eyebrow">ownproof · roadmap · 2026</div>
+
+    <div class="hero-title">
+      <span class="t-line1">ОТ НУЛЯ</span>
+      <span class="t-line2">ДО</span>
+      <div class="t-line3">
+        <span class="t-инженера">ИНЖЕНЕРА</span>
+        <span class="t-mlops">MLOPS<span class="t-star">*</span></span>
+      </div>
+    </div>
+
+    <div class="footnote">
+      <div class="footnote-star">*</div>
+      <div class="footnote-text">
+        <strong>MLOps-инженер</strong> — специалист, который запускает обученные ИИ-модели в реальные продукты.
+        Одна из самых дефицитных профессий в AI: вакансии есть, закрывать их некем.
+        Среднее по рынку — от 200 000 ₽ в месяц.
+      </div>
+    </div>
+
+    <div class="hero-sub">
+      <strong>Что проходят реальные инженеры на старте —</strong><br>
+      и почему это доступно без математического вуза,<br>
+      без профильного образования и без опыта в IT.
+    </div>
+
+    <div class="proof-bar">
+      <div class="proof-item">
+        <div class="proof-num">12</div>
+        <div class="proof-label">Недель</div>
+        <div class="proof-desc">от первой формулы до чтения научных статей про нейросети</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">200+</div>
+        <div class="proof-label">Задач</div>
+        <div class="proof-desc">решены лично, не скопированы из туториалов</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num red">0</div>
+        <div class="proof-label">Брошено</div>
+        <div class="proof-desc">ни одной темы не закрыто без понимания</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PHASES ══════════════ -->
+  <div class="sec-label">маршрут — фаза за фазой</div>
+
+  <div class="phase">
+    <div class="phase-head">
+      <div class="phase-badge">ФАЗА 01</div>
+      <div class="phase-title">Математика — без страха</div>
+      <div class="phase-wks">недели 1–3</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-note">Большинство бросают именно здесь — видят формулы и закрывают вкладку.<br><span class="hl">Секрет: не зубрить формулу, а понять что она делает.</span> Зачем нужна, как работает — и всё встаёт на место.</div>
+      <div class="weeks">
+        <div class="week"><div class="wk-n">1</div><div class="wk-body"><div class="wk-theme">Как нейросеть понимает «больше» и «меньше»</div><div class="wk-plain">Инструмент, который показывает модели куда двигаться дальше</div><div class="wk-analogy">→ как стрелка компаса — только в математике</div></div></div>
+        <div class="week"><div class="wk-n">2</div><div class="wk-body"><div class="wk-theme">Как нейросеть учится на ошибках</div><div class="wk-plain">Метод, который заставляет модель улучшаться с каждой попыткой</div><div class="wk-analogy">→ спускаешься с горы туда, где круче — и повторяешь</div></div></div>
+        <div class="week"><div class="wk-n">3</div><div class="wk-body"><div class="wk-theme">Первый нейрон — собранный руками</div><div class="wk-plain">Самый маленький кирпич нейросети. Понимаешь изнутри как он принимает решение</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn"><div class="conn-dot"></div><div class="conn-line"></div></div>
+
+  <div class="phase">
+    <div class="phase-head">
+      <div class="phase-badge">ФАЗА 02</div>
+      <div class="phase-title">Первый код — нейросеть с нуля</div>
+      <div class="phase-wks">недели 4–8</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-note">Здесь появляется рабочий код. Не скопированный — написанный руками и понятый.<br><span class="hl">Каждая строчка объясняется: зачем она, что делает, что сломается без неё.</span></div>
+      <div class="weeks">
+        <div class="week"><div class="wk-n">4</div><div class="wk-body"><div class="wk-theme">Нейросеть на чистом Python</div><div class="wk-plain">Без готовых библиотек — понимаешь как это работает под капотом</div></div></div>
+        <div class="week"><div class="wk-n">5</div><div class="wk-body"><div class="wk-theme">Матрицы — скорость работы с данными</div><div class="wk-plain">Как обрабатывать тысячи примеров за один шаг, а не по одному</div></div></div>
+        <div class="week"><div class="wk-n">6</div><div class="wk-body"><div class="wk-theme">Как нейросеть измеряет свою ошибку</div><div class="wk-plain">Математика вероятности — в простых словах без формул</div></div></div>
+        <div class="week"><div class="wk-n">7</div><div class="wk-body"><div class="wk-theme">PyTorch — инструмент профессионалов</div><div class="wk-plain">Фреймворк, на котором написано большинство современных ИИ-моделей в мире</div></div></div>
+        <div class="week"><div class="wk-n">8</div><div class="wk-body"><div class="wk-theme">Полный цикл обучения модели</div><div class="wk-plain">От сырых данных до работающей нейросети — сквозной маршрут целиком</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="conn"><div class="conn-dot"></div><div class="conn-line"></div></div>
+
+  <div class="phase">
+    <div class="phase-head">
+      <div class="phase-badge">ФАЗА 03</div>
+      <div class="phase-title">Как устроены реальные ИИ</div>
+      <div class="phase-wks">недели 9–12</div>
+    </div>
+    <div class="phase-body">
+      <div class="phase-note">Здесь становится понятно, как устроены ChatGPT, системы распознавания лиц, голосовые ИИ.<br><span class="hl">Сложнее всего эмоционально — но всё оседает через практику, а не через зубрёжку.</span></div>
+      <div class="weeks">
+        <div class="week"><div class="wk-n">9</div><div class="wk-body"><div class="wk-theme">Сети, которые видят</div><div class="wk-plain">Как ИИ распознаёт картинки, лица, объекты — изнутри</div></div></div>
+        <div class="week"><div class="wk-n">10</div><div class="wk-body"><div class="wk-theme">Трансформеры — сердце ChatGPT</div><div class="wk-plain">Как модель понимает контекст и смысл слов в предложении</div><div class="wk-analogy">→ как совещание: каждый спрашивает «что мне полезно знать?»</div></div></div>
+        <div class="week"><div class="wk-n">11</div><div class="wk-body"><div class="wk-theme">Доучивание готовых моделей</div><div class="wk-plain">Берёшь готовую ИИ-модель — и настраиваешь под свою конкретную задачу</div></div></div>
+        <div class="week"><div class="wk-n">12</div><div class="wk-body"><div class="wk-theme">Читаю научные статьи про нейросети</div><div class="wk-plain">То, что раньше казалось «только для учёных» — становится понятным текстом</div><div class="wk-analogy">→ финиш первого этапа. Дальше — специализация и профессия.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-continues">
+    <span class="arrow">→</span>
+    Фазы 1–3 — это фундамент. После них начинается специализация: инструменты, которые превращают знания в профессию с рынком и зарплатой. Именно здесь появляется MLOps.
+  </div>
+
+  <!-- ══════════════ MLOPS ══════════════ -->
+  <div class="sec-label">куда ведёт этот путь</div>
+
+  <div class="mlops-block">
+    <div class="mlops-header">
+      <div class="mlops-header-title">Кто такой MLOps-инженер</div>
+      <div class="mlops-header-sub">целевая специальность</div>
+    </div>
+    <div class="mlops-body">
+      <div class="mlops-def">
+        <strong>ML-инженер строит нейросеть.</strong> MLOps-инженер делает так, чтобы она работала в реальном продукте — стабильно, масштабируемо, без падений.<br><br>
+        Это гибрид: он понимает, как устроена модель изнутри, <strong>и умеет вывести её в продакшн</strong> — завернуть в сервис, задеплоить, настроить мониторинг. Таких людей на рынке единицы.
+      </div>
+
+      <div class="mlops-does-title">что делает каждый день</div>
+      <div class="mlops-tasks">
+        <div class="mlops-task"><div class="mlops-task-icon">[→]</div><div>Упаковывает обученную модель в API — чтобы любое приложение могло к ней обратиться</div></div>
+        <div class="mlops-task"><div class="mlops-task-icon">[→]</div><div>Разворачивает модель на серверах — через Docker и облачные платформы</div></div>
+        <div class="mlops-task"><div class="mlops-task-icon">[→]</div><div>Следит за качеством работы модели в реальных условиях — когда данные меняются</div></div>
+        <div class="mlops-task"><div class="mlops-task-icon">[→]</div><div>Автоматизирует переобучение: модель сама обновляется по расписанию</div></div>
+        <div class="mlops-task"><div class="mlops-task-icon">[→]</div><div>Хранит историю экспериментов — чтобы знать, какая версия модели лучше и почему</div></div>
+        <div class="mlops-task"><div class="mlops-task-icon">[→]</div><div>Работает на стыке ML-команды и разработки — переводит между двумя мирами</div></div>
+      </div>
+
+      <div class="mlops-why-rare">
+        <div class="mlops-why-rare-title">Почему профессия редкая</div>
+        <div class="rare-stats">
+          <div class="rare-stat"><div class="rare-stat-num">×4</div><div class="rare-stat-desc">вакансий MLOps больше, чем резюме на рынке РФ</div></div>
+          <div class="rare-stat"><div class="rare-stat-num">2 в 1</div><div class="rare-stat-desc">нужно понимать и ML, и инфраструктуру — большинство знают только одно</div></div>
+          <div class="rare-stat"><div class="rare-stat-num">↑</div><div class="rare-stat-desc">спрос растёт с каждым новым ИИ-продуктом на рынке</div></div>
+        </div>
+      </div>
+
+      <div class="salary-title">зарплаты по грейдам · Хабр Карьера 2024</div>
+      <div class="salary-grades">
+        <div class="grade-card"><div class="grade-name">Junior</div><div class="grade-salary">120<span>k ₽</span></div><div class="grade-note">первые 6–12 мес. после входа в профессию</div></div>
+        <div class="grade-card active"><div class="grade-name">Middle</div><div class="grade-salary">294<span>k ₽</span></div><div class="grade-note">среднее значение по рынку РФ</div></div>
+        <div class="grade-card"><div class="grade-name">Senior</div><div class="grade-salary">450<span>k ₽</span></div><div class="grade-note">опыт 3+ лет и архитектурный опыт</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ PROMPT ══════════════ -->
+  <div class="sec-label">сделай свой план обучения</div>
+
+  <div class="prompt-block">
+    <div class="prompt-header">
+      <div class="prompt-header-title">Промпт для любого ИИ-чата</div>
+      <div class="prompt-header-badge">ChatGPT · Claude · Gemini</div>
+    </div>
+    <div class="prompt-intro">
+      Скопируй этот промпт и вставь в любой ИИ-чат.<br>
+      <strong>ИИ сначала соберёт информацию о тебе, а потом составит персональный план</strong> — с учётом твоего уровня и времени.
+    </div>
+    <div class="prompt-box">
+      <div class="prompt-text" id="promptText">Ты — наставник по входу в разработку нейросетей. Я хочу стать MLOps-инженером с нуля.
+
+<span class="kw">Сначала задай мне 5 вопросов по одному</span>, чтобы понять мой уровень:
+— что я уже знаю из математики (школа / вуз / самостоятельно)
+— есть ли опыт программирования и на каком языке
+— сколько часов в день / неделю я могу учиться
+— пробовал ли я уже какие-то курсы по ML или AI
+— какая у меня главная цель: сменить профессию, разобраться для себя, или что-то другое
+
+<span class="kw">После моих ответов</span> составь персональный план обучения:
+— с чего мне конкретно начать (с учётом моего уровня)
+— в каком порядке проходить темы
+— сколько примерно недель займёт каждый этап
+— на что обратить особое внимание именно мне
+
+<span class="kw">Важно:</span> объясняй без терминов там, где это возможно.
+Если термин нужен — объясни его простым языком сразу.</div>
+    </div>
+    <button class="copy-btn" onclick="copyPrompt(this)">→ скопировать промпт</button>
+  </div>
+
+  <!-- ══════════════ CTA ══════════════ -->
+  <div class="cta">
+    <div class="cta-left">
+      <div class="cta-tag">следить за путём</div>
+      <div class="cta-text">Ошибки, разборы, конспекты и прогресс — в Telegram</div>
+    </div>
+    <a href="https://t.me/ownproof" class="cta-link">@OWNPROOF</a>
+  </div>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div class="footer">
+    <div class="footer-brand">OWNPROOF</div>
+    <div class="footer-tag">ИДУ ПЕРВЫМ</div>
+  </div>
+
+</div>
+<script>
+function copyPrompt(btn) {
+  const el = document.getElementById('promptText');
+  const text = el.innerText.trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ скопировано';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '→ скопировать промпт';
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+</script>
+</body>
+</html>
